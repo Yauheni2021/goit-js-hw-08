@@ -10,7 +10,6 @@ const createGalleryMarkup = document.querySelector('.gallery');
 const galleryMarkup = createGalleryItems(galleryItems);
 
 createGalleryMarkup.insertAdjacentHTML('beforeend', galleryMarkup);
-createGalleryMarkup.addEventListener('click', onGalleryClick)
 
 
 function createGalleryItems(items) {
@@ -30,35 +29,15 @@ function createGalleryItems(items) {
     .join('')
 };
 
-function onGalleryClick(e) {
-    const isGalleryActive = e.target.classList.contains('gallery__image');
 
-    if (!isGalleryActive) {
-        return;
-    }  
-    e.preventDefault();
-    
-    const onKeyboardCloseImg = e => {
-        if (e.code === 'Escape') {
-            instance.close();
-        }
-    }
-    const instanceEl = e.target.dataset.source;
-    const instance = basicLightbox.create(`
-    <img
-    src="${instanceEl}"
-    alt="${e.target.alt}"/>`,
-        {
-            onShow: () => {
-                window.addEventListener('keydown', onKeyboardCloseImg)
-            },
-            onClose: () => {
-                window.removeEventListener('keydown', onKeyboardCloseImg)
-            },
-        
-        });
-instance.show()
-}
+const lightbox = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+    captionDelay: 250,
+    docClose: false
+});
+
+lightbox.on('show.simplelightbox', (e) => e.preventDefault());
+
 
 
 console.log(galleryItems);
